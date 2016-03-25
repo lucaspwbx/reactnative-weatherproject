@@ -7,25 +7,56 @@ import React, {
   Image
 } from 'react-native';
 
+let Forecast = require('./Forecast');
+const k = 'da23357bfb227c4648166a99e1e43d19';
+
 class WeatherProject extends Component {
   _handleTextChange(event) {
     console.log(event.nativeEvent.text);
+    const name = event.nativeEvent.text;
+    const apiUrl = `http://api.openweathermap.org/data/2.5/weather?q=${name}&APPID=${k}`;
+    fetch(apiUrl)
+    .then((response) => response.json())
+    .then((responseJSON) => {
+      console.log(responseJSON);
+      this.setState({
+        forecast: {
+          main: responseJSON.weather[0].main,
+          description: responseJSON.weather[0].description,
+          temp: responseJSON.weather[0].temp
+        }
+      });
+    })
+    .catch((error) => {
+      console.warn(error);
+    });
   }
   render() {
     this.state = {
-      zip: ''
-    };
-    return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          You input {this.state.zip}
-        </Text>
-        <TextInput
-          style={styles.input}
-          onSubmitEditing={this._handleTextChange.bind(this)}
-        />
-      </View>
-    )
+      zip: '',
+      forecast: {
+        main: 'Clouds',
+        description: 'few clouds',
+        temp: 45.7
+      }
+    }
+
+     return (
+       <View style={styles.container}>
+         <Text style={styles.welcome}>
+         You input {this.state.zip}
+         </Text>
+         <Forecast
+               main={this.state.forecast.main}
+               description={this.state.forecast.description}
+               temp={this.state.forecast.temp} />
+         <TextInput
+           style={styles.input}
+           returnKeyType='go'
+           onSubmitEditing={this._handleTextChange.bind(this)}
+         />
+       </View>
+     )
   }
 }
 
