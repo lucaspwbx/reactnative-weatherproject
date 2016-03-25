@@ -11,6 +11,17 @@ let Forecast = require('./Forecast');
 const k = 'da23357bfb227c4648166a99e1e43d19';
 
 class WeatherProject extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      zip: '',
+      forecast: {
+        main: 'Clouds',
+        description: 'few clouds',
+        temp: 45.7
+      }
+    };
+  }
   _handleTextChange(event) {
     console.log(event.nativeEvent.text);
     const name = event.nativeEvent.text;
@@ -32,15 +43,6 @@ class WeatherProject extends Component {
     });
   }
   render() {
-    this.state = {
-      zip: '',
-      forecast: {
-        main: 'Clouds',
-        description: 'few clouds',
-        temp: 45.7
-      }
-    }
-
      return (
        <View style={styles.container}>
          <Text style={styles.welcome}>
